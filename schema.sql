@@ -1,0 +1,52 @@
+CREATE TABLE artists (
+	name VARCHAR(20),
+	birthplace VARCHAR(20),
+	style VARCHAR(20),
+	dateofbirth DATE,
+	PRIMARY KEY (name)
+);
+
+CREATE TABLE customers (
+    id INTEGER,
+    name VARCHAR(20),
+    address VARCHAR(20),
+    amount numeric(8,2),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE artworks (
+    title VARCHAR(20),
+    year INTEGER,
+    type VARCHAR(20),
+    price numeric(8,2),
+    artist_name VARCHAR(20),
+    PRIMARY KEY (title),
+    FOREIGN KEY(artist_name) REFERENCES artists(name)
+);
+
+CREATE TABLE likeartists (
+    customer_id INTEGER,
+    artist_name VARCHAR(20),
+    PRIMARY KEY(artist_name, customer_id),
+    FOREIGN KEY (artist_name) REFERENCES artists(name),
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+ALTER TABLE artists
+ADD COLUMN country varchar(100);
+
+ALTER TABLE customers
+ADD COLUMN rating integer CHECK (rating between 1 and 10);
+
+BEGIN;
+
+ALTER TABLE artworks
+DROP CONSTRAINT artworks_artist_name_fkey;
+
+ALTER TABLE artworks
+ADD CONSTRAINT artworks_artist_name_fkey
+FOREIGN KEY (artist_name) REFERENCES artists(name)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+
+COMMIT;
