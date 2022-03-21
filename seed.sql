@@ -56,4 +56,3 @@ VALUES
 
 DELETE
 FROM artists
-WHERE name = 'Smith';
